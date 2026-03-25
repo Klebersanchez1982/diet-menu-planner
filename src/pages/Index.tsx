@@ -24,7 +24,11 @@ export default function Index() {
     const e = endOfMonth(currentDate);
     const keys: string[] = [];
     let d = s;
-    while (d <= e) { keys.push(format(d, 'yyyy-MM-dd')); d = addDays(d, 1); }
+    while (d <= e) {
+      const day = getDay(d);
+      if (day >= 1 && day <= 5) keys.push(format(d, 'yyyy-MM-dd'));
+      d = addDays(d, 1);
+    }
     return keys;
   }, [view, weekDates, currentDate]);
 
