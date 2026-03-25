@@ -75,28 +75,35 @@ export function useDietStore() {
   }, []);
 
   const getShoppingList = useCallback((dateKeys: string[]) => {
-    const map = new Map<string, { unit: string; quantity: number }>();
+    const map = new Map<string, { unit: string; quantity: number; unitCounts: Map<string, number> }>();
     for (const dk of dateKeys) {
       const dayMeals = data[dk];
       if (!dayMeals) continue;
       for (const period of MEAL_PERIODS) {
         const items = dayMeals[period.key] || [];
         for (const item of items) {
-          const key = `${item.description.toLowerCase()}|${item.unit.toLowerCase()}`;
-          const existing = map.get(key);
+          const key = item.description.toLowerCase().trim();
           const qty = parseFloat(item.quantity) || 0;
+          const existing = map.get(key);
           if (existing) {
             existing.quantity += qty;
+            existing.unitCounts.set(item.unit, (existing.unitCounts.get(item.unit) || 0) + 1);
+            // Use most frequent unit
+            let maxCount = 0;
+            for (const [u, c] of existing.unitCounts) {
+              if (c > maxCount) { maxCount = c; existing.unit = u; }
+            }
           } else {
-            map.set(key, { unit: item.unit, quantity: qty });
+            const unitCounts = new Map<string, number>();
+            unitCounts.set(item.unit, 1);
+            map.set(key, { unit: item.unit, quantity: qty, unitCounts });
           }
         }
       }
     }
-    return Array.from(map.entries()).map(([key, val]) => {
-      const [description] = key.split('|');
-      return { description, unit: val.unit, quantity: val.quantity };
-    }).sort((a, b) => a.description.localeCompare(b.description));
+    return Array.from(map.entries()).map(([desc, val]) => ({
+      description: desc, unit: val.unit, quantity: val.quantity,
+    })).sort((a, b) => a.description.localeCompare(b.description));
   }, [data]);
 
   return { data, addMealItem, removeMealItem, toggleCompleted, getWeekDates, getMonthWeeks, getShoppingList };
