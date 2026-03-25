@@ -24,5 +24,6 @@ export interface WeekData {
   [dateKey: string]: DayMeals; // dateKey = 'YYYY-MM-DD'
 }
 
-export const WEEKDAY_LABELS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-export const WEEKDAY_LABELS_FULL = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+// Only weekdays (Mon-Fri)
+export const WEEKDAY_LABELS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'];
+export const WEEKDAY_LABELS_FULL = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];

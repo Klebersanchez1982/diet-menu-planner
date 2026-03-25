@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { MEAL_PERIODS, MealPeriod, WeekData, WEEKDAY_LABELS } from '@/types/diet';
 import { MealPeriodCard } from './MealPeriodCard';
 
@@ -14,7 +13,7 @@ interface Props {
 export function WeekView({ weekDates, data, onAdd, onRemove, onToggle }: Props) {
   return (
     <div className="overflow-x-auto">
-      <div className="grid grid-cols-7 gap-1 min-w-[900px]">
+      <div className="grid grid-cols-5 gap-1 min-w-[700px]">
         {weekDates.map((date, i) => {
           const dateKey = format(date, 'yyyy-MM-dd');
           const dayMeals = data[dateKey] || {};
