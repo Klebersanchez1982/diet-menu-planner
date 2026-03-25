@@ -47,6 +47,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        meal: {
+          breakfast: "hsl(var(--meal-breakfast))",
+          "morning-snack": "hsl(var(--meal-morning-snack))",
+          lunch: "hsl(var(--meal-lunch))",
+          "afternoon-snack": "hsl(var(--meal-afternoon-snack))",
+          dinner: "hsl(var(--meal-dinner))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
