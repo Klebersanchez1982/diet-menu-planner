@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { format, addDays, startOfMonth, endOfMonth } from 'date-fns';
+import { format, addDays, startOfMonth, endOfMonth, getDay } from 'date-fns';
 import { useDietStore } from '@/hooks/useDietStore';
 import { CalendarHeader } from '@/components/diet/CalendarHeader';
 import { WeekView } from '@/components/diet/WeekView';
