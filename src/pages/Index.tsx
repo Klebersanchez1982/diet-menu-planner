@@ -34,7 +34,7 @@ export default function Index() {
 
   const shoppingItems = useMemo(() => getShoppingList(shoppingDateKeys), [shoppingDateKeys, getShoppingList]);
   const shoppingLabel = view === 'week'
-    ? `Semana ${format(weekDates[0], 'dd/MM')} - ${format(weekDates[6], 'dd/MM')}`
+    ? `Semana ${format(weekDates[0], 'dd/MM')} - ${format(weekDates[4], 'dd/MM')}`
     : format(currentDate, 'MMMM yyyy');
 
   const handleExportCalendar = () => {
