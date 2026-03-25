@@ -3,8 +3,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus } from 'lucide-react';
-import { MealPeriod } from '@/types/diet';
+
+const COMMON_UNITS = [
+  'un', 'kg', 'g', 'L', 'ml', 'dúzia', 'pacote', 'lata', 'caixa',
+  'fatia', 'colher (sopa)', 'colher (chá)', 'xícara', 'maço', 'bandeja', 'pote', 'sachê',
+];
 
 interface Props {
   onAdd: (item: { description: string; unit: string; quantity: string }) => void;
@@ -45,12 +50,21 @@ export function AddMealDialog({ onAdd, periodLabel }: Props) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="unit">Unidade</Label>
-              <Input id="unit" value={unit} onChange={e => setUnit(e.target.value)} placeholder="Ex: gramas" />
-            </div>
-            <div>
               <Label htmlFor="qty">Quantidade</Label>
               <Input id="qty" value={quantity} onChange={e => setQuantity(e.target.value)} placeholder="Ex: 150" />
+            </div>
+            <div>
+              <Label>Unidade</Label>
+              <Select value={unit} onValueChange={setUnit}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione" />
+                </SelectTrigger>
+                <SelectContent>
+                  {COMMON_UNITS.map(u => (
+                    <SelectItem key={u} value={u}>{u}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <Button type="submit" className="w-full">Adicionar</Button>
