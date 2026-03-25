@@ -1,4 +1,4 @@
-import { format, addDays, isSameMonth } from 'date-fns';
+import { format, addDays, isSameMonth, getDay } from 'date-fns';
 import { MEAL_PERIODS, MealPeriod, WeekData, WEEKDAY_LABELS } from '@/types/diet';
 import { MealPeriodCard } from './MealPeriodCard';
 
@@ -14,16 +14,16 @@ interface Props {
 export function MonthView({ monthWeekStarts, currentDate, data, onAdd, onRemove, onToggle }: Props) {
   return (
     <div className="space-y-4 overflow-x-auto">
-      {/* Header */}
-      <div className="grid grid-cols-7 gap-1 min-w-[900px]">
+      <div className="grid grid-cols-5 gap-1 min-w-[700px]">
         {WEEKDAY_LABELS.map(d => (
           <div key={d} className="text-center text-xs font-semibold text-muted-foreground uppercase py-1">{d}</div>
         ))}
       </div>
       {monthWeekStarts.map(weekStart => {
-        const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+        // weekStart is Monday, get Mon-Fri
+        const days = Array.from({ length: 5 }, (_, i) => addDays(weekStart, i));
         return (
-          <div key={weekStart.toISOString()} className="grid grid-cols-7 gap-1 min-w-[900px]">
+          <div key={weekStart.toISOString()} className="grid grid-cols-5 gap-1 min-w-[700px]">
             {days.map(date => {
               const dateKey = format(date, 'yyyy-MM-dd');
               const dayMeals = data[dateKey] || {};

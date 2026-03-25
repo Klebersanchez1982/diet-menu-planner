@@ -1,12 +1,11 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { WeekData, MEAL_PERIODS, WEEKDAY_LABELS_FULL } from '@/types/diet';
 
 export function exportWeekPdf(weekDates: Date[], data: WeekData) {
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-  const title = `Cardápio Semanal — ${format(weekDates[0], "dd/MM")} a ${format(weekDates[6], "dd/MM/yyyy")}`;
+  const title = `Cardápio Semanal — ${format(weekDates[0], "dd/MM")} a ${format(weekDates[4], "dd/MM/yyyy")}`;
   doc.setFontSize(14);
   doc.text(title, 148, 12, { align: 'center' });
 
@@ -39,7 +38,10 @@ export function exportWeekPdf(weekDates: Date[], data: WeekData) {
   doc.save(`cardapio-semana-${format(weekDates[0], 'yyyy-MM-dd')}.pdf`);
 }
 
-export function exportShoppingListPdf(items: { description: string; unit: string; quantity: number }[], label: string) {
+export function exportShoppingListPdf(
+  items: { description: string; unit: string; quantity: number; checked?: boolean }[],
+  label: string
+) {
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
   doc.setFontSize(14);
   doc.text(`Lista de Compras — ${label}`, 148, 12, { align: 'center' });
@@ -53,8 +55,14 @@ export function exportShoppingListPdf(items: { description: string; unit: string
     const row: string[] = [];
     for (const col of cols) {
       const item = col[r];
-      row.push(item ? item.description : '');
-      row.push(item ? `${item.quantity} ${item.unit}` : '');
+      if (item) {
+        const check = item.checked ? '✓' : '☐';
+        row.push(`${check} ${item.description}`);
+        row.push(`${item.quantity} ${item.unit}`);
+      } else {
+        row.push('');
+        row.push('');
+      }
     }
     body.push(row);
   }

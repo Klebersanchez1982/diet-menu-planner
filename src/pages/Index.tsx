@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { format, addDays, startOfMonth, endOfMonth } from 'date-fns';
+import { format, addDays, startOfMonth, endOfMonth, getDay } from 'date-fns';
 import { useDietStore } from '@/hooks/useDietStore';
 import { CalendarHeader } from '@/components/diet/CalendarHeader';
 import { WeekView } from '@/components/diet/WeekView';
@@ -24,7 +24,11 @@ export default function Index() {
     const e = endOfMonth(currentDate);
     const keys: string[] = [];
     let d = s;
-    while (d <= e) { keys.push(format(d, 'yyyy-MM-dd')); d = addDays(d, 1); }
+    while (d <= e) {
+      const day = getDay(d);
+      if (day >= 1 && day <= 5) keys.push(format(d, 'yyyy-MM-dd'));
+      d = addDays(d, 1);
+    }
     return keys;
   }, [view, weekDates, currentDate]);
 

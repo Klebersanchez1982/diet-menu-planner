@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { WeekData, MealItem, MealPeriod, MEAL_PERIODS } from '@/types/diet';
-import { format, startOfWeek, addDays, startOfMonth, endOfMonth, eachWeekOfInterval } from 'date-fns';
+import { format, startOfWeek, addDays, startOfMonth, endOfMonth, eachWeekOfInterval, getDay } from 'date-fns';
 
 const STORAGE_KEY = 'diet-calendar-data';
 
@@ -13,6 +13,12 @@ function loadData(): WeekData {
 
 function saveData(data: WeekData) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+/** Returns Mon-Fri dates for the week containing `date` */
+function getWeekdaysOfWeek(date: Date): Date[] {
+  const start = startOfWeek(date, { weekStartsOn: 1 }); // Monday
+  return Array.from({ length: 5 }, (_, i) => addDays(start, i));
 }
 
 export function useDietStore() {
@@ -59,14 +65,13 @@ export function useDietStore() {
   }, [updateData]);
 
   const getWeekDates = useCallback((date: Date) => {
-    const start = startOfWeek(date, { weekStartsOn: 0 });
-    return Array.from({ length: 7 }, (_, i) => addDays(start, i));
+    return getWeekdaysOfWeek(date);
   }, []);
 
   const getMonthWeeks = useCallback((date: Date) => {
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
-    return eachWeekOfInterval({ start: monthStart, end: monthEnd }, { weekStartsOn: 0 });
+    return eachWeekOfInterval({ start: monthStart, end: monthEnd }, { weekStartsOn: 1 });
   }, []);
 
   const getShoppingList = useCallback((dateKeys: string[]) => {
